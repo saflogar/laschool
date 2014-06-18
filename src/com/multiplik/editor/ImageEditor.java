@@ -32,23 +32,23 @@ public class ImageEditor {
 	
 	public void setName (String name)
 	{
-		gLabel.drawString(name, 50, 300);
+		gLabel.drawString(name, 230, 298);
 	}
 	
 	public void setGrade(String grade)
 	{
-		gLabel.drawString(grade, 20, 20);
+		gLabel.drawString(grade, 211, 407);
 		
 	}
 	
-	public void setSchool(String school)
+	public void setSection(String section)
 	{
-		gLabel.drawString(school, 20, 20);
+		gLabel.drawString(section, 536, 408);
 	}
 	
 	public void setYear(String year)
 	{
-		gLabel.drawString(year, 20, 20);
+		gLabel.drawString(year, 845, 413);
 	}
 	
 	public void setSubjects(List<String> subjecList)
