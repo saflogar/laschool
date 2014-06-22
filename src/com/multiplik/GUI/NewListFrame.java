@@ -41,17 +41,21 @@ public class NewListFrame extends JDialog implements ActionListener
 	private JPanel panel1;
 	private JPanel panel2;
 	private JLabel tittleLabel2;
+	private ArrayList<String> subjectList;
+	private List<JTextField> subjectFieldList;
+	private Frame parentFrame;
 	NewListFrame(JFrame parent)
 	{
 		super(parent,"");
+		parentFrame = (Frame)parent;
+		parent.setEnabled(false);
 		pane = new JTabbedPane();
 		createPanel1();
 		this.setVisible(true);
 		this.pack();
 		this.setLocationRelativeTo(null);
-		
-		
 	}
+	
 	public void createPanel1()
 	{
 		
@@ -83,7 +87,7 @@ public class NewListFrame extends JDialog implements ActionListener
 		gc.fill = GridBagConstraints.NONE;
 		panel1.add(schoolLabel,gc);
 		
-		schoolNameField = new JComboBox<String>(new String[]{"AnexaMatutino","Anexa Vespertino"});
+		schoolNameField = new JComboBox<String>(new String[]{"Anexa Matutino","Anexa Vespertino"});
 		gc.gridx = 2;
 		gc.gridy = 1;
 		gc.gridwidth = 1;
@@ -173,7 +177,7 @@ public class NewListFrame extends JDialog implements ActionListener
 		
 		int numMaterias = (Integer) subjectField.getValue();
 		
-		List<JTextField> subjectFieldList = new ArrayList<JTextField>();
+	    subjectFieldList = new ArrayList<JTextField>();
 		for (int i=0; i< numMaterias; i++)
 		{
 			subjectFieldList.add(new JTextField(5));
@@ -194,6 +198,18 @@ public class NewListFrame extends JDialog implements ActionListener
 		
 	
 	}
+	
+	private List<String> getSubjectList()
+	{
+		subjectList = new ArrayList<String>();
+		for (int i = 0; i < subjectFieldList.size();i++)
+		{
+			subjectList.add(subjectFieldList.get(i).getText()) ;
+			
+		}
+		return subjectList;
+		
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -212,7 +228,10 @@ public class NewListFrame extends JDialog implements ActionListener
 		}else if(e.getSource() == okButton)
 		{
 			MultiplikConnector con = new MultiplikConnector();
-			con.createNewSubjectTable((String)schoolNameField.getSelectedItem()+""+gradeField.getValue() + "Grado");
+			con.createNewSubjectTable((String)schoolNameField.getSelectedItem()+""+ " Grado "+gradeField.getValue(),getSubjectList());
+			parentFrame.refreshSubjectList() ;
+			parentFrame.setEnabled(true);
+		
 			this.dispose();
 		}
 	}	

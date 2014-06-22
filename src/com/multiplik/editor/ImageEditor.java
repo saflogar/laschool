@@ -10,16 +10,14 @@ import java.util.List;
 
 public class ImageEditor {
 	
-	private String name;
-	private String school;
-	private String grade;
-	private String year;
+
 	private Image labelImg;
 	private BufferedImage sheetImg;
 	private int numOfLabels;
 	private List <Image> labelList;
 	private Graphics gSheet;
 	private Graphics gLabel;
+	private List<String> subjectList;
 	
 	public ImageEditor(BufferedImage labelImg, int numOfLabels)	
 	{
@@ -51,9 +49,16 @@ public class ImageEditor {
 		gLabel.drawString(year, 845, 413);
 	}
 	
-	public void setSubjects(List<String> subjecList)
+	public void setSubjects(List<String> subjectList)
 	{
+		this.subjectList = subjectList;
 			
+	}
+	
+	private void drawSubject (String subjectName)
+	{
+		gLabel.drawString(subjectName, 400, 489);
+		
 	}
 	
 	private void drawLetterSheet()
@@ -63,19 +68,23 @@ public class ImageEditor {
 		gSheet.setColor(Color.WHITE);
 		gSheet.drawRect(0, 0, 1700, 2200);
 		int x=0,y=0;
-		for (int i=0 ; i < 8; i++)
+	
+		
+		for (int i=0 ; i < subjectList.size(); i++)
 		{
-			x=0;
-			for (int j=0; j< 2; j++)
+			x = 0;
+			
+			drawSubject(subjectList.get(i));
+			gSheet.drawImage(labelImg,(int)x,(int)y,null);
+			System.out.println("imagen"+i+"dibujada en coordenadas"+x+","+y);
+		
+			if ((i%2) > 0)
 			{
-				gSheet.drawImage(labelImg,(int)x,(int)y,null);
-				System.out.println("imagen"+i+"dibujada en coordenadas"+x+","+y);
-				x+=labelImg.getWidth(null)+100;
-			
-				
+				y+=labelImg.getHeight(null)+100; 
 			}
-			y+=labelImg.getHeight(null)+100;
+			x+=labelImg.getWidth(null)+100; 
 			
+		
 		}
 		
 	}

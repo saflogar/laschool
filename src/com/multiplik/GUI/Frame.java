@@ -17,14 +17,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 
 import com.multiplik.connector.MultiplikConnector;
 import com.multiplik.editor.ImageEditor;
@@ -45,17 +48,18 @@ public class Frame extends JFrame implements ActionListener {
 	private JTextField sectionField;
 	private JTextField subjectField;
 	
-	JList<String> list;
-	
-	JButton submittButton;
-	JButton addButton;
+	private MultiplikConnector con ;
+	private JList<String> list;
+	private JScrollPane scrollerList;
+	private DefaultListModel<String> listModel;
+	private JButton submittButton;
+	private JButton addButton;
 	
 	
 	public Frame()
 	{
 		super();
 		this.setTitle("Temporada Escolar 2014");
-	
 		this.setVisible(true);
 		createGUI();
 		this.setSize(800, 500);
@@ -83,15 +87,28 @@ public class Frame extends JFrame implements ActionListener {
 		gc.ipady = 50;
 		gc.fill = GridBagConstraints.NONE;
 		contenedor.add(labelTittle,gc);*/
+		
+		con = new MultiplikConnector();
+		//System.out.print("[INFO] Number of tables:" + con.getNumberOfTables());
+		
+		String[] l = (String[]) con.getTables().toArray(new String[con.getTables().size()]);
+		listModel = new DefaultListModel<String>();
+		for (int i =0; i < l.length; i++)
+		{
+			listModel.addElement(l[i]);
+		}
+		
+		list = new JList<String>(listModel);
 	
-		list = new JList<String>(new String[]{"Lista 1","Lista 2"});
+		scrollerList = new JScrollPane(list);
+	//	list.setModel(listModel);
 		gc.gridx = 0;
 		gc.gridy = 1;
 		gc.gridwidth = 1;
 		gc.gridheight = 6;
 		gc.ipadx = 80;
 		gc.fill = GridBagConstraints.BOTH;
-		contenedor.add(list,gc);
+		contenedor.add(scrollerList,gc);
 		
 		labelName = new JLabel("Alumno:");
 		gc.gridx = 1;
@@ -193,67 +210,75 @@ public class Frame extends JFrame implements ActionListener {
 		gc.fill = GridBagConstraints.BOTH;
 		contenedor.add(addButton,gc);
 		addButton.addActionListener(this);
-		
-		
 	}
 	
-	public String getName()
+	private String getFieldName()
 	{
 		
 		return nameField.getText();
 		
 	}
 	
-	public String getSection()
+	private String getSection()
 	{
 		return sectionField.getText();
 	}
 	
-	public String getGrade()
+	private String getGrade()
 	{
 		return gradeField.getText();
 	}
 	
-	public String getYear()
+	private String getYear()
 	{
 		return yearField.getText();
 	}
 	
-	public String getSubject()
+	private String getSubject()
 	{
 		return subjectField.getText();
 	}
 	
+	public void refreshSubjectList()
+	{
+		listModel.removeAllElements();
+		String[] l = (String[]) con.getTables().toArray(new String[con.getTables().size()]);
+		
+		for (int i = 0;i < l.length; i++ )
+		{
+			listModel.addElement(l[i]);
+		}
+	}
 	
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		Object objeto = e.getSource();
 		JButton pressedButton = (JButton)objeto;
-		String textButton = pressedButton.getText();
-		if (textButton.equals("Agregar"))
+		
+		if (pressedButton == addButton)
 		{
 			NewListFrame f = new NewListFrame(this);
 			
-		}else 
+		}else if(pressedButton == submittButton)
 		{
 			try {
+			//	List <String> list = new ArrayList<String>();
 				ImageEditor editor = new ImageEditor(ImageIO.read(new File("./etiquet.png")),1);
-				editor.setName(this.getName());
+				
+				editor.setName(nameField.getText());
 				editor.setGrade(this.getGrade());
 				editor.setSection(this.getSection());
 				editor.setYear(this.getYear());
+				editor.setSubjects(con.getSubjectList(list.getSelectedValue()));
+				
 				ImageIO.write((RenderedImage) editor.getLabelSheet(), "png", new File("./test.png"));
 				editor.getLabelSheet();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
 		}
-		
-		
 	}
 
 }
