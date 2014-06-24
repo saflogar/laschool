@@ -31,7 +31,7 @@ public class MultiplikConnector {
 	public void createNewSubjectTable (String tableName, List<String> subjects)
 	{
 		try {
-			String mysql ="CREATE TABLE `"+tableName+"` ( subject VARCHAR(20) )";
+			String mysql ="CREATE TABLE `"+tableName+"` ( subject VARCHAR(40) )";
 			System.out.print("[INFO] creating table: " + mysql);
 			con.ejecutar(mysql);
 			for (int i = 0; i < subjects.size();i++)
@@ -44,6 +44,19 @@ public class MultiplikConnector {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void deleteTable (String tableName)
+	{
+		String mysql = "DROP TABLE `" + tableName + "`";
+		System.out.println("[INFO] table: '"+tableName+"' deleted with success");
+		try {
+			con.ejecutar(mysql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public List<String> getTables()  

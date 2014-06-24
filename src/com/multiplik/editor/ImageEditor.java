@@ -47,6 +47,7 @@ public class ImageEditor {
 	public void setYear(String year)
 	{
 		gLabel.drawString(year, 845, 413);
+		
 	}
 	
 	public void setSubjects(List<String> subjectList)
@@ -61,6 +62,13 @@ public class ImageEditor {
 		
 	}
 	
+	private void clearSubject()
+	{
+		gLabel.setColor(Color.WHITE);
+		gLabel.fillRect(32, 448, 983, 50);
+		gLabel.setColor(Color.BLACK);
+	}
+	
 	private void drawLetterSheet()
 	{
 		sheetImg = new BufferedImage(3400,4400,BufferedImage.TYPE_INT_ARGB);
@@ -68,23 +76,18 @@ public class ImageEditor {
 		gSheet.setColor(Color.WHITE);
 		gSheet.drawRect(0, 0, 1700, 2200);
 		int x=0,y=0;
-	
-		
 		for (int i=0 ; i < subjectList.size(); i++)
 		{
-			x = 0;
-			
 			drawSubject(subjectList.get(i));
 			gSheet.drawImage(labelImg,(int)x,(int)y,null);
-			System.out.println("imagen"+i+"dibujada en coordenadas"+x+","+y);
-		
+			this.clearSubject();
+			System.out.println("[INFO] imagen "+i+" dibujada en coordenadas:("+x+","+y+")");			
 			if ((i%2) > 0)
 			{
 				y+=labelImg.getHeight(null)+100; 
-			}
+				x = 0;
+			}else
 			x+=labelImg.getWidth(null)+100; 
-			
-		
 		}
 		
 	}
@@ -93,7 +96,6 @@ public class ImageEditor {
 	{
 		drawLetterSheet();
 		return sheetImg;
-		
 	}
 	
 

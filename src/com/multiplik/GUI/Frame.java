@@ -52,9 +52,10 @@ public class Frame extends JFrame implements ActionListener {
 	private JList<String> list;
 	private JScrollPane scrollerList;
 	private DefaultListModel<String> listModel;
+	
 	private JButton submittButton;
 	private JButton addButton;
-	
+	private JButton removeButton;
 	
 	public Frame()
 	{
@@ -210,6 +211,17 @@ public class Frame extends JFrame implements ActionListener {
 		gc.fill = GridBagConstraints.BOTH;
 		contenedor.add(addButton,gc);
 		addButton.addActionListener(this);
+		
+		removeButton = new JButton("Eliminar");
+		gc.gridx = 0;
+		gc.gridy = 8;
+		gc.gridwidth = 1;
+		gc.gridheight =1;
+		gc.ipady = 0;
+		gc.fill = GridBagConstraints.BOTH;
+		contenedor.add(removeButton,gc);
+		removeButton.addActionListener(this);
+		
 	}
 	
 	private String getFieldName()
@@ -271,13 +283,17 @@ public class Frame extends JFrame implements ActionListener {
 				editor.setSection(this.getSection());
 				editor.setYear(this.getYear());
 				editor.setSubjects(con.getSubjectList(list.getSelectedValue()));
-				
 				ImageIO.write((RenderedImage) editor.getLabelSheet(), "png", new File("./test.png"));
-				editor.getLabelSheet();
+				
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+		}else if (pressedButton == removeButton)
+		{
+			con.deleteTable(list.getSelectedValue());
+			refreshSubjectList();
+			
 		}
 	}
 

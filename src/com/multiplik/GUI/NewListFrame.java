@@ -35,9 +35,12 @@ public class NewListFrame extends JDialog implements ActionListener
 	private JComboBox <String>schoolNameField;
 	private JSpinner subjectField;
 	private JSpinner gradeField;
+	
 	private JButton cancelButton;
 	private JButton nextButton;
 	private JButton okButton;
+	private JButton returnButton;
+	
 	private JPanel panel1;
 	private JPanel panel2;
 	private JLabel tittleLabel2;
@@ -62,7 +65,6 @@ public class NewListFrame extends JDialog implements ActionListener
 		
 		panel1 = new JPanel();
 		Container container = this.getContentPane();
-	//	container.setLayout(new GridBagLayout());
 		panel1.setLayout(new GridBagLayout());
 		
 		GridBagConstraints gc = new GridBagConstraints();
@@ -170,30 +172,48 @@ public class NewListFrame extends JDialog implements ActionListener
 	private void createPanel2()
 	{
 		panel2 = new JPanel();
-		panel2.setLayout(new BoxLayout(panel2,BoxLayout.Y_AXIS));
-		
-		tittleLabel2 = new JLabel("Materias");
-		panel2.add(tittleLabel2);
-		
+		panel2.setLayout(new BoxLayout(panel2,BoxLayout.X_AXIS));
 		int numMaterias = (Integer) subjectField.getValue();
+	
 		
-	    subjectFieldList = new ArrayList<JTextField>();
-		for (int i=0; i< numMaterias; i++)
-		{
-			subjectFieldList.add(new JTextField(5));
-		}
+		/*============================================================================*/	
+		/*Logica para crear los paneles donde se ingresaran las materias*/
+		int k= 0;
+		subjectFieldList = new ArrayList <JTextField>();
+		System.out.println("[INFO] Numero de materias:"+numMaterias);
 		
-		for (int i =0; i< subjectFieldList.size();i++)
-		{
-			subjectFieldList.get(i).setMaximumSize(new Dimension(400,20));
-			panel2.add(subjectFieldList.get(i));
-		}
+		
+		while(true){
+				JPanel subjectPanel = new JPanel ();
+				tittleLabel2 = new JLabel("Materias");
+				subjectPanel = new JPanel();
+				subjectPanel.setLayout(new BoxLayout(subjectPanel, BoxLayout.Y_AXIS));
+				subjectPanel.add(tittleLabel2);
+				
+				for (int h = 0; h < 6 ; h++ )
+				{
+					JTextField materiaField = new JTextField(5);
+					subjectFieldList.add(materiaField);	
+					subjectPanel.add(materiaField);	
+					k++;
+					System.out.println("[INFO] Corrida numero:"+k);
+				}//fin de for
+				panel2.add(subjectPanel);
+				if (k >= numMaterias){break;}
+
+		}//fin de while
+		/*=============================================================================*/
+		
 		okButton = new JButton("OK");
 		okButton.addActionListener(this);
 		panel2.add(okButton);
 		
+		returnButton = new JButton ("<--");
+		returnButton.addActionListener(this);
+		panel2.add(returnButton);
 		
 		pane.addTab("Materias", panel2);
+		this.pack();
 		
 		
 	
@@ -204,7 +224,7 @@ public class NewListFrame extends JDialog implements ActionListener
 		subjectList = new ArrayList<String>();
 		for (int i = 0; i < subjectFieldList.size();i++)
 		{
-			subjectList.add(subjectFieldList.get(i).getText()) ;
+			subjectList.add(subjectFieldList.get(i).getText());
 			
 		}
 		return subjectList;
@@ -213,9 +233,6 @@ public class NewListFrame extends JDialog implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
-
-		
 		if (e.getSource() == nextButton	)
 		{
 			createPanel2();
@@ -225,6 +242,7 @@ public class NewListFrame extends JDialog implements ActionListener
 		}else if (e.getSource() == cancelButton)
 		{
 			this.dispose();
+			parentFrame.setEnabled(true);
 		}else if(e.getSource() == okButton)
 		{
 			MultiplikConnector con = new MultiplikConnector();
@@ -233,6 +251,12 @@ public class NewListFrame extends JDialog implements ActionListener
 			parentFrame.setEnabled(true);
 		
 			this.dispose();
+		}
+		else if(e.getSource() == returnButton)
+		{
+			pane.setSelectedIndex(0);
+			pane.remove(1);
+			
 		}
 	}	
 	
