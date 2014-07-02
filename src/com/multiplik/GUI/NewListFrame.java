@@ -1,12 +1,16 @@
 package com.multiplik.GUI;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,22 +20,33 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 
 import com.multiplik.connector.MultiplikConnector;
+
+/*	Pendientes: 
+ * 	- Obtener los datos de la tabla de schools y llenar schoolField con estos datos
+ * 	- Corregir selects del conector
+ * */
 
 @SuppressWarnings("serial")
 public class NewListFrame extends JDialog implements ActionListener
 {
+	private DefaultComboBoxModel<String> schoolsNameModel;
 	private JTabbedPane pane ;
 	private JLabel schoolLabel;
 	private JLabel gradeLabel;
 	private JLabel subjectLabel;
 	private JLabel tittleLabel;
+//	private JLabel addSchoolLabel;
 	private JComboBox <String>schoolNameField;
 	private JSpinner subjectField;
 	private JSpinner gradeField;
@@ -40,6 +55,7 @@ public class NewListFrame extends JDialog implements ActionListener
 	private JButton nextButton;
 	private JButton okButton;
 	private JButton returnButton;
+	private JButton addSchoolButton;
 	
 	private JPanel panel1;
 	private JPanel panel2;
@@ -47,22 +63,26 @@ public class NewListFrame extends JDialog implements ActionListener
 	private ArrayList<String> subjectList;
 	private List<JTextField> subjectFieldList;
 	private Frame parentFrame;
+	
+	
+	
+	private MultiplikConnector con ;
 	NewListFrame(JFrame parent)
 	{
 		super(parent,"");
+		this.setVisible(true);
+		con = new MultiplikConnector();
 		parentFrame = (Frame)parent;
 		parent.setEnabled(false);
 		pane = new JTabbedPane();
 		createPanel1();
-		this.setVisible(true);
+		
 		this.pack();
 		this.setLocationRelativeTo(null);
 	}
 	
 	public void createPanel1()
 	{
-		
-		
 		panel1 = new JPanel();
 		Container container = this.getContentPane();
 		panel1.setLayout(new GridBagLayout());
@@ -89,7 +109,13 @@ public class NewListFrame extends JDialog implements ActionListener
 		gc.fill = GridBagConstraints.NONE;
 		panel1.add(schoolLabel,gc);
 		
-		schoolNameField = new JComboBox<String>(new String[]{"Anexa Matutino","Anexa Vespertino"});
+		schoolsNameModel = new DefaultComboBoxModel<String>();
+		schoolsNameModel.addElement("");
+		schoolsNameModel.addElement("Nueva Lista");
+		for (int i = 0; i< con.getSchools().size(); i++)
+		{
+			schoolsNameModel.addElement(con.getSchools().get(i));
+		}
 		gc.gridx = 2;
 		gc.gridy = 1;
 		gc.gridwidth = 1;
@@ -97,9 +123,36 @@ public class NewListFrame extends JDialog implements ActionListener
 		gc.ipady = 0;
 		gc.ipadx = 40;
 		gc.fill = GridBagConstraints.HORIZONTAL;
+		schoolNameField = new JComboBox<String>(schoolsNameModel);
+		schoolNameField.setSelectedIndex(0);
+		schoolNameField.addActionListener(this);
 		panel1.add(schoolNameField,gc);
 		
 		
+		addSchoolButton = new JButton("Agregar");
+		gc.gridx = 3;
+		gc.gridy = 1;
+		gc.gridwidth = 1;
+		gc.gridheight = 1;
+		gc.ipady = 0;
+		gc.ipadx = 0;
+		gc.fill = GridBagConstraints.NONE;
+		panel1.add(addSchoolButton,gc);
+	/*	
+		addSchoolLabel = new JLabel("Agregar Escuela");
+		addSchoolLabel.setFont(new Font(Font.SANS_SERIF, Font.ITALIC,12));
+		addSchoolLabel.setForeground(Color.BLUE);
+		gc.gridx = 3;
+		gc.gridy = 1;
+		gc.gridwidth = 1;
+		gc.gridheight = 1;
+		gc.ipady = 30;
+		gc.ipadx = 0;
+		gc.fill = GridBagConstraints.NONE;
+		addSchoolLabel.addMouseListener(this);
+		panel1.add(addSchoolLabel,gc);
+		*/
+	
 		gradeLabel = new JLabel("Grado:");
 		gc.gridx = 0;
 		gc.gridy = 2;
@@ -174,14 +227,17 @@ public class NewListFrame extends JDialog implements ActionListener
 		panel2 = new JPanel();
 		panel2.setLayout(new BoxLayout(panel2,BoxLayout.X_AXIS));
 		int numMaterias = (Integer) subjectField.getValue();
-	
+			
+		JScrollPane scrollPane = new JScrollPane(new SubjectPanel(numMaterias,.25));
+		scrollPane.setPreferredSize(new Dimension(200,200));
+		panel2.add(scrollPane);
 		
 		/*============================================================================*/	
 		/*Logica para crear los paneles donde se ingresaran las materias*/
-		int k= 0;
+	/*	int k= 0;
 		subjectFieldList = new ArrayList <JTextField>();
 		System.out.println("[INFO] Numero de materias:"+numMaterias);
-		
+		System.out.println("");
 		
 		while(true){
 				JPanel subjectPanel = new JPanel ();
@@ -219,6 +275,18 @@ public class NewListFrame extends JDialog implements ActionListener
 	
 	}
 	
+	private void refreshSchoolsNames()
+	{
+		schoolsNameModel.removeAllElements();
+		schoolsNameModel.addElement("");
+		schoolsNameModel.addElement("Nueva Lista");
+		for (int i = 0; i< con.getSchools().size(); i++)
+		{
+			schoolsNameModel.addElement(con.getSchools().get(i));
+		}
+		
+	}
+	
 	private List<String> getSubjectList()
 	{
 		subjectList = new ArrayList<String>();
@@ -238,18 +306,16 @@ public class NewListFrame extends JDialog implements ActionListener
 			createPanel2();
 			pane.setSelectedIndex(1);
 			pane.setEnabledAt(0, false);
-			
 		}else if (e.getSource() == cancelButton)
 		{
 			this.dispose();
 			parentFrame.setEnabled(true);
 		}else if(e.getSource() == okButton)
 		{
-			MultiplikConnector con = new MultiplikConnector();
-			con.createNewSubjectTable((String)schoolNameField.getSelectedItem()+""+ " Grado "+gradeField.getValue(),getSubjectList());
+			//MultiplikConnector con = new MultiplikConnector();
+			con.addNewSubject((String)schoolNameField.getSelectedItem()+""+ " Grado "+gradeField.getValue(),getSubjectList());
 			parentFrame.refreshSubjectList() ;
 			parentFrame.setEnabled(true);
-		
 			this.dispose();
 		}
 		else if(e.getSource() == returnButton)
@@ -258,9 +324,15 @@ public class NewListFrame extends JDialog implements ActionListener
 			pane.remove(1);
 			
 		}
-	}	
-	
-	
-	
-	
+		else if (e.getSource() == schoolNameField)
+		{
+			//int selectedIndex = new Integer(schoolNameField.getSelectedIndex());
+			if (schoolNameField.getSelectedIndex() == 1)
+			{
+				String newSchoolName = JOptionPane.showInputDialog("Ingrese el nombre de la escuela");
+				con.addNewSchool(newSchoolName);
+				this.refreshSchoolsNames();
+			}
+		}
+	}
 }

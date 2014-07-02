@@ -92,7 +92,7 @@ public class Frame extends JFrame implements ActionListener {
 		con = new MultiplikConnector();
 		//System.out.print("[INFO] Number of tables:" + con.getNumberOfTables());
 		
-		String[] l = (String[]) con.getTables().toArray(new String[con.getTables().size()]);
+		String[] l = (String[]) con.getLists().toArray(new String[con.getLists().size()]);
 		listModel = new DefaultListModel<String>();
 		for (int i =0; i < l.length; i++)
 		{
@@ -140,6 +140,7 @@ public class Frame extends JFrame implements ActionListener {
 		gc.ipadx = 0;
 		gc.anchor = GridBagConstraints.EAST;
 		gc.fill = GridBagConstraints.NONE;
+		
 		contenedor.add(labelGrade,gc);
 		
 		gradeField = new JTextField();
@@ -254,7 +255,7 @@ public class Frame extends JFrame implements ActionListener {
 	public void refreshSubjectList()
 	{
 		listModel.removeAllElements();
-		String[] l = (String[]) con.getTables().toArray(new String[con.getTables().size()]);
+		String[] l = (String[]) con.getLists().toArray(new String[con.getLists().size()]);
 		
 		for (int i = 0;i < l.length; i++ )
 		{
@@ -291,7 +292,7 @@ public class Frame extends JFrame implements ActionListener {
 			}
 		}else if (pressedButton == removeButton)
 		{
-			con.deleteTable(list.getSelectedValue());
+			con.deleteList(list.getSelectedValue());
 			refreshSubjectList();
 			
 		}

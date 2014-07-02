@@ -28,17 +28,14 @@ public class MultiplikConnector {
 		}
 	}
 	
-	public void createNewSubjectTable (String tableName, List<String> subjects)
+	public void addNewSubject (String listName, List<String> subjects)
 	{
 		try {
-			String mysql ="CREATE TABLE `"+tableName+"` ( subject VARCHAR(40) )";
-			System.out.print("[INFO] creating table: " + mysql);
-			con.ejecutar(mysql);
+			String mysql;
 			for (int i = 0; i < subjects.size();i++)
 			{
-				mysql = "INSERT INTO `"+tableName + "`(subject) VALUES ('"+subjects.get(i)+ "')";
+				mysql = "INSERT INTO subjects_peer_list (subject) VALUES ('"+subjects.get(i)+ "')";
 				con.ejecutar(mysql);
-				
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -46,7 +43,7 @@ public class MultiplikConnector {
 		}
 	}
 	
-	public void deleteTable (String tableName)
+	public void deleteList (String tableName)
 	{
 		String mysql = "DROP TABLE `" + tableName + "`";
 		System.out.println("[INFO] table: '"+tableName+"' deleted with success");
@@ -59,12 +56,12 @@ public class MultiplikConnector {
 		
 	}
 	
-	public List<String> getTables()  
+	public List<String> getLists()  
 	{
 		List<String> tableList = new ArrayList<String>();
 		ResultSet result;
 		try {
-			result = con.consulta("SHOW TABLES;");
+			result = con.consulta("SELECT * FROM list;");
 	
 			System.out.println("[INFO] "+result);
 
@@ -84,6 +81,19 @@ public class MultiplikConnector {
 		return tableList;
 			}
 	
+	public void addNewSchool (String schoolName)
+	{
+		String mysql = "INSERT INTO schools (school_name) VALUES('"+schoolName + "');";
+		try {
+			con.ejecutar(mysql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//con.ejecutar(mysql);
+			
+	}
+	
 	public List<String> getSubjectList(String tableName)
 	{
 		List <String> subjectsList = new ArrayList<String>();
@@ -102,6 +112,26 @@ public class MultiplikConnector {
 		}
 		
 		return subjectsList;
+	}
+	
+	public List<String> getSchools(){
+		List<String> schoolList = new ArrayList<String>();
+		ResultSet result;
+		
+		try {
+			result = con.consulta("SELECT * FROM schools;");
+			
+			while (result.next())
+			{
+				schoolList.add(result.getString(2));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return schoolList;
 	}
 	
 }
