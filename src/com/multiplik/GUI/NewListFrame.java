@@ -227,8 +227,11 @@ public class NewListFrame extends JDialog implements ActionListener
 		panel2 = new JPanel();
 		panel2.setLayout(new BoxLayout(panel2,BoxLayout.X_AXIS));
 		int numMaterias = (Integer) subjectField.getValue();
-			
-		JScrollPane scrollPane = new JScrollPane(new SubjectPanel(numMaterias,.25));
+		/*==============================SUBJECT PANEL===========================================*/	
+		
+		SubjectPanel panelMaterias = new SubjectPanel(numMaterias,.25);
+		panelMaterias.setPreferredSize(new Dimension(2000,2000));
+		JScrollPane scrollPane = new JScrollPane(panelMaterias);
 		scrollPane.setPreferredSize(new Dimension(200,200));
 		panel2.add(scrollPane);
 		

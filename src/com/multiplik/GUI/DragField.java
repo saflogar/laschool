@@ -21,7 +21,7 @@ public class DragField extends JTextField
 		setDoubleBuffered(false);
         setMargin(new Insets(0, 0, 0, 0));
         setSize(25, 25);
-        setPreferredSize(new Dimension(25, 25));
+       // setPreferredSize(new Dimension(25, 25));
 		  addMouseListener(new MouseAdapter(){
 	            public void mousePressed(MouseEvent e){
 	                draggedAtX = e.getX();
@@ -37,7 +37,7 @@ public class DragField extends JTextField
 	        });
 	}
 	
-	  public static void main(String[] args){
+	/*  public static void main(String[] args){
 	        JFrame frame = new JFrame("DragButton");
 	        frame.setLayout(null);
 	        frame.getContentPane().add(new DragField());
@@ -47,6 +47,6 @@ public class DragField extends JTextField
 	        frame.setLocationRelativeTo(null);
 	        frame.setVisible(true);
 	    }
-	
+	*/
 
 }

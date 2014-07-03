@@ -1,25 +1,33 @@
 package com.multiplik.GUI;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class SubjectPanel extends JPanel{
 	
 	private BufferedImage imageLabel;
 	private int numMaterias;
 	private double scale;
+	private boolean isFirstTime;
+	private List<JTextField> subjectList;
 	SubjectPanel(int numMaterias, double scale)
 	{
 		super();
 		this.numMaterias = numMaterias;
 		this.scale = scale;
+		this.isFirstTime = true;
+		this.setLayout(null);
 		try {
 			imageLabel = ImageIO.read(new File("./etiquet.png"));
 		} catch (IOException e) {
@@ -41,7 +49,18 @@ public class SubjectPanel extends JPanel{
 		double imageHeight = imageLabel.getHeight()*scale;
 		for (int i = 0; i < numMaterias; i++)
 		{
+			if(isFirstTime)
+			{
+			JTextField textField = new JTextField();
+			this.add(textField);
+			System.out.println("[INFO] added textfield to subjectPanel in position("+x+","+y+")");
+			textField.setBounds((int)(x+439*scale)-100, (int) (y+505*scale)-20, 250, 20);
+			textField.setFont(new Font("courier",Font.BOLD,(int) (36*scale)));
+			}
+			
 			g.drawImage(imageLabel, x, y,(int)imageWidth,(int) imageHeight, null);
+		
+			
 			if ((i%2) > 0)
 			{
 				y +=imageHeight+(scale * 100); 
@@ -50,6 +69,7 @@ public class SubjectPanel extends JPanel{
 			x += imageWidth+(scale * 100); 
 					
 		}
+		isFirstTime = false;
 		
 		
 	}
