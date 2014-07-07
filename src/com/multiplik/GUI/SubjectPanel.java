@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,6 +29,7 @@ public class SubjectPanel extends JPanel{
 		this.scale = scale;
 		this.isFirstTime = true;
 		this.setLayout(null);
+		subjectList = new ArrayList<JTextField>();
 		try {
 			imageLabel = ImageIO.read(new File("./etiquet.png"));
 		} catch (IOException e) {
@@ -36,10 +38,8 @@ public class SubjectPanel extends JPanel{
 		}
 		
 		
-
 	}
 	
-
 	@Override
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -52,6 +52,7 @@ public class SubjectPanel extends JPanel{
 			if(isFirstTime)
 			{
 			JTextField textField = new JTextField();
+			subjectList.add(textField);
 			this.add(textField);
 			System.out.println("[INFO] added textfield to subjectPanel in position("+x+","+y+")");
 			textField.setBounds((int)(x+439*scale)-100, (int) (y+505*scale)-20, 250, 20);
@@ -74,5 +75,13 @@ public class SubjectPanel extends JPanel{
 		
 	}
 	
-
+	public String[] getSubjectsList()
+	{
+		String subjectStringList[] = new String[subjectList.size()];
+		for (int i = 0; i < subjectList.size(); i++)
+		{
+			subjectStringList[i] = subjectList.get(i).getText();
+		}
+		return subjectStringList;
+	}
 }

@@ -64,6 +64,8 @@ public class NewListFrame extends JDialog implements ActionListener
 	private List<JTextField> subjectFieldList;
 	private Frame parentFrame;
 	
+	SubjectPanel panelMaterias ;
+	
 	
 	
 	private MultiplikConnector con ;
@@ -229,11 +231,13 @@ public class NewListFrame extends JDialog implements ActionListener
 		int numMaterias = (Integer) subjectField.getValue();
 		/*==============================SUBJECT PANEL===========================================*/	
 		
-		SubjectPanel panelMaterias = new SubjectPanel(numMaterias,.25);
+		panelMaterias = new SubjectPanel(numMaterias,.25);
 		panelMaterias.setPreferredSize(new Dimension(2000,2000));
 		JScrollPane scrollPane = new JScrollPane(panelMaterias);
 		scrollPane.setPreferredSize(new Dimension(200,200));
 		panel2.add(scrollPane);
+		
+	
 		
 		/*============================================================================*/	
 		/*Logica para crear los paneles donde se ingresaran las materias*/
@@ -316,8 +320,9 @@ public class NewListFrame extends JDialog implements ActionListener
 		}else if(e.getSource() == okButton)
 		{
 			//MultiplikConnector con = new MultiplikConnector();
-			con.addNewSubject((String)schoolNameField.getSelectedItem()+""+ " Grado "+gradeField.getValue(),getSubjectList());
-			parentFrame.refreshSubjectList() ;
+			con.addNewList((String)schoolNameField.getSelectedItem(), (Integer)gradeField.getValue(),panelMaterias.getSubjectsList());
+			//con.addNewList((String)schoolNameField.getSelectedItem()+""+ " Grado "+gradeField.getValue(),getSubjectList());
+			parentFrame.refreshListList() ;
 			parentFrame.setEnabled(true);
 			this.dispose();
 		}

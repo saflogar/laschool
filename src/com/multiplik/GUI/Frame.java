@@ -252,7 +252,7 @@ public class Frame extends JFrame implements ActionListener {
 		return subjectField.getText();
 	}
 	
-	public void refreshSubjectList()
+	public void refreshListList()
 	{
 		listModel.removeAllElements();
 		String[] l = (String[]) con.getLists().toArray(new String[con.getLists().size()]);
@@ -293,7 +293,7 @@ public class Frame extends JFrame implements ActionListener {
 		}else if (pressedButton == removeButton)
 		{
 			con.deleteList(list.getSelectedValue());
-			refreshSubjectList();
+			refreshListList();
 			
 		}
 	}

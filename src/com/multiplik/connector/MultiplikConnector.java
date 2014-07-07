@@ -28,15 +28,42 @@ public class MultiplikConnector {
 		}
 	}
 	
-	public void addNewSubject (String listName, List<String> subjects)
+	public void addNewList (String schoolName,int schoolGrade, String[] subjects)
 	{
 		try {
 			String mysql;
-			for (int i = 0; i < subjects.size();i++)
+			mysql = "SELECT id_school FROM schools WHERE school_name='"+schoolName+"';";
+			System.out.println("[INFO] Executin mysql query: "+mysql);
+			ResultSet resultSet = con.consulta(mysql);
+			if (resultSet.next())
 			{
-				mysql = "INSERT INTO subjects_peer_list (subject) VALUES ('"+subjects.get(i)+ "')";
-				con.ejecutar(mysql);
+				
+				String schoolID = resultSet.getString(1);
+				System.out.println("[INFO] schoolID="+schoolID);
+				con.ejecutar("INSERT INTO list (grade,scholar_year,id_school) VALUES("+schoolGrade+","+"2014"+","+schoolID+")");
+				System.out.println("[INFO] lista agregada con exito");
+				System.out.println("[INFO] "+"SELECT id_list FROM list WHERE "+"id_school='"+schoolID+"'");
+				resultSet = null;
+				resultSet = con.consulta("SELECT id_list FROM list WHERE "+"id_school='"+schoolID+"' AND grade = '"+schoolGrade+"'");
+				if (resultSet.next())
+				{
+					String listID = resultSet.getString(1);
+					for (String s : subjects)
+					{	
+						System.out.println("[INFO] INSERT INTO subject (subject_name,list_id) VALUES ("+s+","+listID+"); ");
+						mysql ="INSERT INTO subject (subject_name,list_id) VALUES ('"+s+"',"+listID+");";
+						con.ejecutar(mysql);
+					/*	mysql = "INSERT INTO subjects_peer_list (subject_id,list_id) VALUES ('"+s+ ","+listID+" ')";
+						con.ejecutar(mysql);*/
+					}
+					
+				}
+				
 			}
+			//String schoolID = con.consulta(mysql).getString(0);
+			//mysql = "INSERT INTO list(grade,school_year)";
+			
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -68,8 +95,8 @@ public class MultiplikConnector {
 		//	System.out.print("[INFO] Numero de tablas: "+result.getMetaData());
 			while(result.next())
 			{ 
-				System.out.println(result.getString(1));
-				tableList.add(result.getString(1));
+				System.out.println(result.getString(3));
+				tableList.add(result.getString(3));
 			}
 
 			
@@ -133,5 +160,7 @@ public class MultiplikConnector {
 		
 		return schoolList;
 	}
+	
+
 	
 }
