@@ -128,7 +128,7 @@ public class NewListFrame extends JDialog implements ActionListener
 		
 		schoolsNameModel = new DefaultComboBoxModel<String>();
 		schoolsNameModel.addElement("");
-		schoolsNameModel.addElement("Nueva Lista");
+		schoolsNameModel.addElement("Nueva Escuela");
 		for (int i = 0; i< con.getSchools().size(); i++)
 		{
 			schoolsNameModel.addElement(con.getSchools().get(i));
