@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +74,21 @@ public class NewListFrame extends JDialog implements ActionListener
 	{
 		super(parent,"");
 		this.setVisible(true);
-		con = new MultiplikConnector();
+		try {
+			con = new MultiplikConnector();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		parentFrame = (Frame)parent;
 		parent.setEnabled(false);
 		pane = new JTabbedPane();

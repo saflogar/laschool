@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +68,6 @@ public class Frame extends JFrame implements ActionListener {
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
-		
 	}
 	
 
@@ -89,10 +89,24 @@ public class Frame extends JFrame implements ActionListener {
 		gc.fill = GridBagConstraints.NONE;
 		contenedor.add(labelTittle,gc);*/
 		
-		con = new MultiplikConnector();
+		try {
+			con = new MultiplikConnector();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//System.out.print("[INFO] Number of tables:" + con.getNumberOfTables());
 		
-		String[] l = (String[]) con.getLists().toArray(new String[con.getLists().size()]);
+		String[] l = (String[]) con.getListOfList().toArray(new String[con.getLists().size()]);
 		listModel = new DefaultListModel<String>();
 		for (int i =0; i < l.length; i++)
 		{
@@ -255,7 +269,7 @@ public class Frame extends JFrame implements ActionListener {
 	public void refreshListList()
 	{
 		listModel.removeAllElements();
-		String[] l = (String[]) con.getLists().toArray(new String[con.getLists().size()]);
+		String[] l = (String[]) con.getListOfList().toArray(new String[con.getLists().size()]);
 		
 		for (int i = 0;i < l.length; i++ )
 		{
@@ -290,12 +304,13 @@ public class Frame extends JFrame implements ActionListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		}else if (pressedButton == removeButton)
+		}
+		/*else if (pressedButton == removeButton)
 		{
 			con.deleteList(list.getSelectedValue());
 			refreshListList();
 			
-		}
+		}*/
 	}
 
 }

@@ -2,9 +2,9 @@ package com.multiplik.connector;
 import java.sql.*;
 
 public class Connector {
-    private Connection con;
-    private Statement sentSQL;
-    private ResultSet rst;
+    protected static Connection con;
+    protected static Statement sentSQL;
+    protected static ResultSet rst;
 
 
     public Connector() throws ClassNotFoundException,SQLException,InstantiationException,IllegalAccessException{
@@ -29,6 +29,7 @@ public class Connector {
     public void close() throws SQLException
     {
     	con.close();
+    	
     }
     
 /*
@@ -41,7 +42,7 @@ return rst;
 
   
     // metodo para ejecutar sentencias sql
-     public int ejecutar(String sql) throws SQLException
+     public static int ejecutar(String sql) throws SQLException
 {
           //executeUpdate nos sirve para hacer UPDATE, INSERT y ese tipo de sentencias que modifican la base de datos
          // no se necesita devolver algo
@@ -49,7 +50,7 @@ return rst;
 }
      
      //metodo para ejecutar consultas de sentencias sql en la base de datos
-     public ResultSet consulta(String sql) throws SQLException{
+     public static ResultSet consulta(String sql) throws SQLException{
          
          //executeQuery nos sirve solamente para hacer consultas de la base de datos, solo acepta sentencias como SELECT
          // se necesita forzosamente devolver algo, guardar en una variable el resultado de la consulta
