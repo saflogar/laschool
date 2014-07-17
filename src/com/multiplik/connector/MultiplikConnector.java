@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MultiplikConnector extends Connector {
@@ -20,10 +21,10 @@ public class MultiplikConnector extends Connector {
 	
 	
 	
-	public static void addNewList (String schoolName,int schoolGrade, String[] subjects)
+	public  void addNewList (String schoolName,int schoolGrade, String[] subjects)
 	{
 		try {
-			PreparedStatement statement = con.prepareStatement("SELECT id_school FROM shcools WHERE school_name = ?");
+			PreparedStatement statement = con.prepareStatement("SELECT id_school FROM schools WHERE school_name = ?");
 			statement.setString(1, schoolName);
 			ResultSet resultSet ;
 			resultSet = statement.executeQuery();
@@ -45,7 +46,7 @@ public class MultiplikConnector extends Connector {
 					{	
 						System.out.println("[INFO] INSERT INTO subject (subject_name,list_id) VALUES ("+s+","+listID+"); ");
 						statement = null;
-						statement = con.prepareStatement("INSERT INTO subject (subject_name,list_id) VALUES (' ? ',' ? ')");
+						statement = con.prepareStatement("INSERT INTO subject (subject_name,list_id) VALUES ( ? , ? )");
 						statement.setString(1, s);
 						statement.setInt(2, Integer.parseInt(listID));
 						statement.execute();
@@ -82,7 +83,7 @@ public class MultiplikConnector extends Connector {
 		
 	}*/
 	
-	public static List<String> getLists()  
+	public  List<String> getLists()  
 	{
 		PreparedStatement statement;
 	//	String[][] tableList = new String[][];
@@ -112,12 +113,12 @@ public class MultiplikConnector extends Connector {
 			}
 	
 	
-	public static void addNewSchool (String schoolName)
+	public  void addNewSchool (String schoolName)
 	{
 		
 		//String mysql = "INSERT INTO schools (school_name) VALUES('"+schoolName + "');";
 		try {
-			PreparedStatement statement = con.prepareStatement("INSERT INTO schools (school_name) VALUES ('?');");
+			PreparedStatement statement = con.prepareStatement("INSERT INTO schools (school_name) VALUES (?);");
 			statement.setString(1, schoolName);
 			statement.executeUpdate();
 		} catch (SQLException e) {
@@ -128,7 +129,7 @@ public class MultiplikConnector extends Connector {
 			
 	}
 	
-	public static List<String> getSubjectList(String tableName)
+	public  List<String> getSubjectList(String tableName)
 	{
 		List <String> subjectsList = new ArrayList<String>();
 		ResultSet result;
@@ -151,7 +152,7 @@ public class MultiplikConnector extends Connector {
 		return subjectsList;
 	}
 	
-	public static List<String> getSchools(){
+	public  List<String> getSchools(){
 		List<String> schoolList = new ArrayList<String>();
 		ResultSet result;
 		
@@ -174,24 +175,46 @@ public class MultiplikConnector extends Connector {
 		return schoolList;
 	}
 	
-	public static List <String> getListOfList ()
+	public  void getListOfList (HashMap<Integer, String> listMap)
 	{
-		List<String> listaDeListas = new ArrayList<String>();
+		//List<String> listaDeListas = new ArrayList<String>();
 		PreparedStatement statement;
+		listMap.clear();
 		ResultSet result;
 		try {
-			 statement  = con.prepareStatement("SELECT school_name, grade FROM schools,list WHERE list.id_school = schools.id_school; ");
+			 statement  = con.prepareStatement("SELECT school_name, grade, id_list FROM schools,list WHERE list.id_school = schools.id_school; ");
 		     result = statement.executeQuery();
 		     while (result.next())
 		     {
-		    	 listaDeListas.add(result.getString(1) + " " + result.getString(2));
+		    	
+		    	// listaDeListas.add();
+		    	 listMap.put(result.getInt(3), result.getString(1) + " " + result.getString(2));
 		     }
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return listaDeListas;
+	//	return listaDeListas;
+	}
+	
+	public  void deleteList(int id)
+	{
+		
+		PreparedStatement statement;
+		try {
+			statement = con.prepareStatement("DELETE FROM list WHERE id_list = ?");
+			statement.setInt(1, id);
+			statement.execute();
+			
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+			
+		
 	}
 	
 

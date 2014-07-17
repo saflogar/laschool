@@ -15,7 +15,9 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
@@ -57,6 +59,8 @@ public class Frame extends JFrame implements ActionListener {
 	private JButton submittButton;
 	private JButton addButton;
 	private JButton removeButton;
+	
+	private HashMap<Integer,String> listMap;
 	
 	public Frame()
 	{
@@ -105,16 +109,29 @@ public class Frame extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 		//System.out.print("[INFO] Number of tables:" + con.getNumberOfTables());
-		
-		String[] l = (String[]) con.getListOfList().toArray(new String[con.getLists().size()]);
+		/*=================================================================================================*/
+		// Logica para rellenar lista de listas escolares.
+		/*=================================================================================================*/
+		//String[] l = (String[]) con.getListOfList().toArray(new String[con.getLists().size()]);
+		listMap = new HashMap<Integer,String>();
+		con.getListOfList(listMap);
 		listModel = new DefaultListModel<String>();
-		for (int i =0; i < l.length; i++)
+		
+		for (String element: listMap.values())
+		{
+			listModel.addElement(element);
+			System.out.println("[INFO] added "+element+" to the listModel" );
+			
+		}
+	/*	for (int i =0; i < l.length; i++)
 		{
 			listModel.addElement(l[i]);
 		}
-		
+		*/
 		list = new JList<String>(listModel);
-	
+		
+		
+	    /*==============================================================================================*/
 		scrollerList = new JScrollPane(list);
 	//	list.setModel(listModel);
 		gc.gridx = 0;
@@ -269,11 +286,10 @@ public class Frame extends JFrame implements ActionListener {
 	public void refreshListList()
 	{
 		listModel.removeAllElements();
-		String[] l = (String[]) con.getListOfList().toArray(new String[con.getLists().size()]);
-		
-		for (int i = 0;i < l.length; i++ )
+		con.getListOfList(listMap);
+		for (String element: listMap.values())
 		{
-			listModel.addElement(l[i]);
+			listModel.addElement(element);
 		}
 	}
 	
@@ -305,12 +321,28 @@ public class Frame extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
-		/*else if (pressedButton == removeButton)
+		else if (pressedButton == removeButton)
 		{
-			con.deleteList(list.getSelectedValue());
-			refreshListList();
+			String selectedValue = list.getSelectedValue();
+			int idToDelete;
+			for (Entry<Integer, String> entry : listMap.entrySet())
+			{
+				System.out.println("[INFO] is :"+selectedValue+"equal to :"+entry);
+				if(selectedValue.equals(entry.getValue()))
+				{
+					idToDelete = entry.getKey();
+					System.out.print("[INFO] id to delete ="+idToDelete);
+					con.deleteList(idToDelete);
+					refreshListList();
+					break;
+					
+				}
+				
+			}
 			
-		}*/
+			
+			
+		}
 	}
 
 }
