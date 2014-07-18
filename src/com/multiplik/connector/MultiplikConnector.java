@@ -129,15 +129,15 @@ public class MultiplikConnector extends Connector {
 			
 	}
 	
-	public  List<String> getSubjectList(String tableName)
+	public  List<String> getSubjectList(int listID)
 	{
 		List <String> subjectsList = new ArrayList<String>();
 		ResultSet result;
 		PreparedStatement statement;
 		
 		try {
-			statement = con.prepareStatement("SELECT * FROM ?");
-			statement.setString(1, tableName);
+			statement = con.prepareStatement("SELECT subject_name FROM subject WHERE list_id = ?");
+			statement.setInt(1, listID);
 			//result = con.consulta("SELECT * FROM `"+tableName+"`;");
 			result = statement.executeQuery();
 			while (result.next())
@@ -160,7 +160,6 @@ public class MultiplikConnector extends Connector {
 			PreparedStatement statement = con.prepareStatement("SELECT * FROM schools");
 			result =statement.executeQuery();
 			//result = con.consulta("SELECT * FROM schools;");
-			
 			
 			while (result.next())
 			{

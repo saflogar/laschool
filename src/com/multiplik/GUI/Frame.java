@@ -27,6 +27,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -43,6 +44,8 @@ public class Frame extends JFrame implements ActionListener {
 	private JLabel labelYear;
 	private JLabel labelSection;
 	private JLabel labelSubject;
+	
+	private JPanel panelDeDatos;
 	
 	private	JTextField tittleField;
 	private	JTextField nameField;
@@ -76,7 +79,7 @@ public class Frame extends JFrame implements ActionListener {
 	
 
 	
-	public void createGUI()
+	private void createGUI()
 	{
 		Container contenedor = this.getContentPane();
 		contenedor.setLayout(new GridBagLayout());
@@ -129,20 +132,18 @@ public class Frame extends JFrame implements ActionListener {
 		}
 		*/
 		list = new JList<String>(listModel);
-		
-		
 	    /*==============================================================================================*/
+		
 		scrollerList = new JScrollPane(list);
-	//	list.setModel(listModel);
 		gc.gridx = 0;
 		gc.gridy = 1;
-		gc.gridwidth = 1;
-		gc.gridheight = 6;
+		gc.gridwidth = 2;
+		gc.gridheight = 2;
 		gc.ipadx = 80;
 		gc.fill = GridBagConstraints.BOTH;
 		contenedor.add(scrollerList,gc);
 		
-		labelName = new JLabel("Alumno:");
+	/*	labelName = new JLabel("Alumno:");
 		gc.gridx = 1;
 		gc.gridy = 1;
 		gc.gridwidth = 1;
@@ -222,7 +223,16 @@ public class Frame extends JFrame implements ActionListener {
 		gc.ipady = 0;
 		gc.ipadx = 80;
 		gc.fill = GridBagConstraints.HORIZONTAL;
-		contenedor.add(yearField,gc);
+		contenedor.add(yearField,gc);*/
+		
+		panelDeDatos = new PanelDeDatos();
+		gc.gridx = 2;
+		gc.gridy = 1;
+		gc.gridwidth = 1;
+		gc.gridheight =1;
+		gc.ipady = 0;
+		gc.fill = GridBagConstraints.BOTH;
+		contenedor.add(panelDeDatos,gc);
 		
 		submittButton = new JButton("Crear");
 		gc.gridx = 5;
@@ -236,21 +246,21 @@ public class Frame extends JFrame implements ActionListener {
 		
 		addButton = new JButton("Agregar");
 		gc.gridx = 0;
-		gc.gridy = 7;
+		gc.gridy = 3;
 		gc.gridwidth = 1;
 		gc.gridheight =1;
-		gc.ipady = 0;
-		gc.fill = GridBagConstraints.BOTH;
+		gc.ipady = 5;
+		gc.fill = GridBagConstraints.NONE;
 		contenedor.add(addButton,gc);
 		addButton.addActionListener(this);
 		
 		removeButton = new JButton("Eliminar");
-		gc.gridx = 0;
-		gc.gridy = 8;
+		gc.gridx = 1;
+		gc.gridy = 3;
 		gc.gridwidth = 1;
 		gc.gridheight =1;
-		gc.ipady = 0;
-		gc.fill = GridBagConstraints.BOTH;
+		gc.ipady = 5;
+		gc.fill = GridBagConstraints.NONE;
 		contenedor.add(removeButton,gc);
 		removeButton.addActionListener(this);
 		
@@ -293,6 +303,26 @@ public class Frame extends JFrame implements ActionListener {
 		}
 	}
 	
+	private int searchID(String value)
+	{
+		int id = 0;
+		for (Entry<Integer, String> entry : listMap.entrySet())
+		{
+			System.out.println("[INFO] is :"+value+"equal to :"+entry);
+			if(value.equals(entry.getValue()))
+			{
+				id = entry.getKey();
+				System.out.print("[INFO] id to delete ="+id);
+				//con.deleteList(id);
+				//refreshListList();
+				break;
+				
+			}
+			
+		}
+		return id;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -313,7 +343,7 @@ public class Frame extends JFrame implements ActionListener {
 				editor.setGrade(this.getGrade());
 				editor.setSection(this.getSection());
 				editor.setYear(this.getYear());
-				editor.setSubjects(con.getSubjectList(list.getSelectedValue()));
+				editor.setSubjects(con.getSubjectList(searchID(list.getSelectedValue())));
 				ImageIO.write((RenderedImage) editor.getLabelSheet(), "png", new File("./test.png"));
 				
 			} catch (IOException e1) {
@@ -324,7 +354,10 @@ public class Frame extends JFrame implements ActionListener {
 		else if (pressedButton == removeButton)
 		{
 			String selectedValue = list.getSelectedValue();
-			int idToDelete;
+			
+			con.deleteList(searchID(selectedValue));
+			refreshListList();
+			/*int idToDelete;
 			for (Entry<Integer, String> entry : listMap.entrySet())
 			{
 				System.out.println("[INFO] is :"+selectedValue+"equal to :"+entry);
@@ -338,11 +371,104 @@ public class Frame extends JFrame implements ActionListener {
 					
 				}
 				
-			}
+			}*/
 			
 			
 			
 		}
+	}
+	
+	class PanelDeDatos extends JPanel
+	{
+		public PanelDeDatos() {
+			super();
+			GridBagConstraints gc = new GridBagConstraints();
+			this.setLayout(new GridBagLayout());
+			
+			labelName = new JLabel("Alumno:");
+			gc.gridx = 0;
+			gc.gridy = 0;
+			gc.gridwidth = 1;
+			gc.gridheight =1;
+			gc.ipady = 30;
+			gc.ipadx = 0;
+			gc.fill = GridBagConstraints.BOTH;
+			this.add(labelName,gc);
+			
+			nameField = new JTextField();
+			gc.gridx = 1;
+			gc.gridy = 0;
+			gc.gridwidth = 4;
+			gc.gridheight =1;
+			gc.ipady = 0;
+			gc.ipadx = 0;
+			gc.fill = GridBagConstraints.HORIZONTAL;
+			this.add(nameField,gc);
+			
+			labelGrade = new JLabel("Grado:");
+			gc.gridx = 0;
+			gc.gridy = 1;
+			gc.gridwidth = 1;
+			gc.gridheight =1;
+			gc.ipady = 30;
+			gc.ipadx = 0;
+			gc.anchor = GridBagConstraints.EAST;
+			gc.fill = GridBagConstraints.NONE;
+			this.add(labelGrade,gc);
+			
+			gradeField = new JTextField();
+			gc.gridx = 1;
+			gc.gridy = 1;
+			gc.gridwidth = 1;
+			gc.gridheight =1;
+			gc.ipady = 0;
+			gc.ipadx = 20;
+			gc.fill = GridBagConstraints.HORIZONTAL;
+			this.add(gradeField,gc);
+			
+			labelSection = new JLabel ("Sección:");
+			gc.gridx = 2;
+			gc.gridy = 1;
+			gc.gridwidth = 1;
+			gc.gridheight =1;
+			gc.ipady = 0;
+			gc.anchor = GridBagConstraints.EAST;
+			gc.fill = GridBagConstraints.NONE;
+			this.add(labelSection,gc);
+			
+			sectionField = new JTextField();
+			gc.gridx = 3;
+			gc.gridy = 1;
+			gc.gridwidth = 1;
+			gc.gridheight =1;
+			gc.ipady = 0;
+			gc.fill = GridBagConstraints.HORIZONTAL;
+			this.add(sectionField,gc);
+			
+			labelYear = new JLabel ("Año:");
+			gc.gridx = 4;
+			gc.gridy = 1;
+			gc.gridwidth = 1;
+			gc.gridheight =1;
+			gc.ipady = 0;
+			gc.ipadx = 0;
+			gc.anchor = GridBagConstraints.EAST;
+			gc.fill = GridBagConstraints.NONE;
+			this.add(labelYear,gc);
+			
+			yearField = new JTextField();
+			gc.gridx = 5;
+			gc.gridy = 1;
+			gc.gridwidth = 1;
+			gc.gridheight =1;
+			gc.ipady = 0;
+			gc.ipadx = 80;
+			gc.fill = GridBagConstraints.HORIZONTAL;
+			this.add(yearField,gc);
+		}
+		
+		
+		
 	}
 
 }
