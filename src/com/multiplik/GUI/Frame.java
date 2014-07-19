@@ -136,7 +136,8 @@ public class Frame extends JFrame implements ActionListener {
 	    /*==============================================================================================*/
 		
 		try {
-			JLabel logoLabel = new JLabel (new ImageIcon(ImageIO.read(new File("./src/resources/logo2.png"))));
+			System.out.println("[DEBUG] URL="+this.getClass().getResource("/src/resources/logo2.png"));
+			JLabel logoLabel = new JLabel (new ImageIcon(ImageIO.read(new File("./resources/logo2.png"))));
 			gc.gridx = 0;
 			gc.gridy = 0;
 			gc.gridwidth = 2;
@@ -218,7 +219,7 @@ public class Frame extends JFrame implements ActionListener {
 	
 		try {
 			
-			Image addButtonImage = ImageIO.read(new File("./src/resources/add_small.png"));
+			Image addButtonImage = ImageIO.read(new File("./resources/add_small.png"));
 			addButton = new JButton();
 			addButton.setIcon(new ImageIcon(addButtonImage));
 			gc.gridx = 0;
@@ -242,7 +243,7 @@ public class Frame extends JFrame implements ActionListener {
 		}
 		try {
 			Image removeButtonImage;
-			removeButtonImage = ImageIO.read(new File("./src/resources/minus_small.png"));
+			removeButtonImage = ImageIO.read(new File("./resources/minus_small.png"));
 			removeButton = new JButton();
 			removeButton.setIcon(new ImageIcon(removeButtonImage));
 			gc.gridx = 1;

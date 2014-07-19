@@ -58,7 +58,7 @@ public class ImageEditor {
 	
 	private void drawSubject (String subjectName)
 	{
-		gLabel.drawString(subjectName, 400, 489);
+		gLabel.drawString(subjectName, 20, 489);
 		
 	}
 	
