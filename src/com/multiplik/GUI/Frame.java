@@ -1,12 +1,14 @@
 package com.multiplik.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +23,7 @@ import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -30,7 +33,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.ListModel;
 
 import com.multiplik.connector.MultiplikConnector;
@@ -115,7 +120,7 @@ public class Frame extends JFrame implements ActionListener {
 		/*=================================================================================================*/
 		// Logica para rellenar lista de listas escolares.
 		/*=================================================================================================*/
-		//String[] l = (String[]) con.getListOfList().toArray(new String[con.getLists().size()]);
+
 		listMap = new HashMap<Integer,String>();
 		con.getListOfList(listMap);
 		listModel = new DefaultListModel<String>();
@@ -126,143 +131,141 @@ public class Frame extends JFrame implements ActionListener {
 			System.out.println("[INFO] added "+element+" to the listModel" );
 			
 		}
-	/*	for (int i =0; i < l.length; i++)
-		{
-			listModel.addElement(l[i]);
-		}
-		*/
+
 		list = new JList<String>(listModel);
 	    /*==============================================================================================*/
+		
+		try {
+			JLabel logoLabel = new JLabel (new ImageIcon(ImageIO.read(new File("./src/resources/logo2.png"))));
+			gc.gridx = 0;
+			gc.gridy = 0;
+			gc.gridwidth = 2;
+			gc.gridheight = 1;
+			gc.ipadx = 0;
+			gc.ipady = 0;
+			gc.weightx = .3;
+			gc.weighty = .1;
+			gc.anchor = GridBagConstraints.EAST;
+			gc.fill = GridBagConstraints.NONE;
+			contenedor.add(logoLabel,gc);
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		JTextPane encabezadoText = new JTextPane();
+		encabezadoText.setContentType("text/html");
+		encabezadoText.setFont(new Font("Courier", Font.BOLD, 36));
+		encabezadoText.setText("" +
+				" <font face='verdana' color='blue' size='28'>" +
+				"<p align='center'> Multiplik</p>" +
+				"<p align='center'> Temporada Escolar 2014</p></font> ");
+		encabezadoText.setOpaque(false);
+		gc.gridx = 2;
+		gc.gridy = 0;
+		gc.gridwidth = 1;
+		gc.gridheight = 1;
+		gc.ipadx = 0;
+		gc.ipady = 0;
+		gc.weightx = .3;
+		gc.weighty = .1;
+		gc.anchor = GridBagConstraints.WEST;
+		gc.fill = GridBagConstraints.NONE;
+		gc.insets = new Insets(20,20,20,20);
+		contenedor.add(encabezadoText,gc);
 		
 		scrollerList = new JScrollPane(list);
 		gc.gridx = 0;
 		gc.gridy = 1;
 		gc.gridwidth = 2;
 		gc.gridheight = 2;
-		gc.ipadx = 80;
+		gc.ipadx = 0;
+		gc.ipady = 0;
+		gc.weightx = .3;
+		gc.weighty = 1;
+		gc.anchor = GridBagConstraints.CENTER;
 		gc.fill = GridBagConstraints.BOTH;
+		gc.insets = new Insets(20,20,20,20);
 		contenedor.add(scrollerList,gc);
-		
-	/*	labelName = new JLabel("Alumno:");
-		gc.gridx = 1;
-		gc.gridy = 1;
-		gc.gridwidth = 1;
-		gc.gridheight =1;
-		gc.ipady = 30;
-		gc.ipadx = 0;
-		gc.fill = GridBagConstraints.BOTH;
-		contenedor.add(labelName,gc);
-		
-		nameField = new JTextField();
-		gc.gridx = 2;
-		gc.gridy = 1;
-		gc.gridwidth = 5;
-		gc.gridheight =1;
-		gc.ipady = 0;
-		gc.ipadx = 0;
-		gc.fill = GridBagConstraints.HORIZONTAL;
-		contenedor.add(nameField,gc);
-		
-		labelGrade = new JLabel("Grado:");
-		gc.gridx = 1;
-		gc.gridy = 2;
-		gc.gridwidth = 1;
-		gc.gridheight =1;
-		gc.ipady = 30;
-		gc.ipadx = 0;
-		gc.anchor = GridBagConstraints.EAST;
-		gc.fill = GridBagConstraints.NONE;
-		
-		contenedor.add(labelGrade,gc);
-		
-		gradeField = new JTextField();
-		gc.gridx = 2;
-		gc.gridy = 2;
-		gc.gridwidth = 1;
-		gc.gridheight =1;
-		gc.ipady = 0;
-		gc.ipadx = 20;
-		gc.fill = GridBagConstraints.HORIZONTAL;
-		contenedor.add(gradeField,gc);
-		
-		labelSection = new JLabel ("Sección");
-		gc.gridx = 3;
-		gc.gridy = 2;
-		gc.gridwidth = 1;
-		gc.gridheight =1;
-		gc.ipady = 0;
-		gc.anchor = GridBagConstraints.EAST;
-		gc.fill = GridBagConstraints.NONE;
-		contenedor.add(labelSection,gc);
-		
-		sectionField = new JTextField();
-		gc.gridx = 4;
-		gc.gridy = 2;
-		gc.gridwidth = 1;
-		gc.gridheight =1;
-		gc.ipady = 0;
-		gc.fill = GridBagConstraints.HORIZONTAL;
-		contenedor.add(sectionField,gc);
-		
-		labelYear = new JLabel ("Año:");
-		gc.gridx = 5;
-		gc.gridy = 2;
-		gc.gridwidth = 1;
-		gc.gridheight =1;
-		gc.ipady = 0;
-		gc.ipadx = 0;
-		gc.anchor = GridBagConstraints.EAST;
-		gc.fill = GridBagConstraints.NONE;
-		contenedor.add(labelYear,gc);
-		
-		yearField = new JTextField();
-		gc.gridx = 6;
-		gc.gridy = 2;
-		gc.gridwidth = 1;
-		gc.gridheight =1;
-		gc.ipady = 0;
-		gc.ipadx = 80;
-		gc.fill = GridBagConstraints.HORIZONTAL;
-		contenedor.add(yearField,gc);*/
 		
 		panelDeDatos = new PanelDeDatos();
 		gc.gridx = 2;
 		gc.gridy = 1;
 		gc.gridwidth = 1;
 		gc.gridheight =1;
+		gc.ipadx = 0;
 		gc.ipady = 0;
+		gc.weightx = 1;
+		gc.weighty = 1;
+		gc.anchor = GridBagConstraints.CENTER;
 		gc.fill = GridBagConstraints.BOTH;
 		contenedor.add(panelDeDatos,gc);
 		
 		submittButton = new JButton("Crear");
-		gc.gridx = 5;
-		gc.gridy = 6;
+		gc.gridx = 2;
+		gc.gridy = 2;
 		gc.gridwidth = 1;
 		gc.gridheight =1;
-		gc.ipady = 0;
-		gc.fill = GridBagConstraints.BOTH;
+		gc.ipadx = 20;
+		gc.ipady = 20;
+		gc.weightx = 1;
+		gc.weighty = 1;
+		gc.anchor = GridBagConstraints.NORTH;
+		gc.fill = GridBagConstraints.NONE;
 		contenedor.add(submittButton,gc);
 		submittButton.addActionListener(this);
+	
+		try {
+			
+			Image addButtonImage = ImageIO.read(new File("./src/resources/add_small.png"));
+			addButton = new JButton();
+			addButton.setIcon(new ImageIcon(addButtonImage));
+			gc.gridx = 0;
+			gc.gridy = 3;
+			gc.gridwidth = 1;
+			gc.gridheight =1;
+			gc.ipadx = 0;
+			gc.ipady = 0;
+			gc.weightx = .1;
+			gc.weighty = .1;
+			gc.insets = new Insets(20,20,20,20);
+			gc.anchor = GridBagConstraints.CENTER;
+			
+			gc.fill = GridBagConstraints.BOTH;
+			contenedor.add(addButton,gc);
+			addButton.addActionListener(this);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			Image removeButtonImage;
+			removeButtonImage = ImageIO.read(new File("./src/resources/minus_small.png"));
+			removeButton = new JButton();
+			removeButton.setIcon(new ImageIcon(removeButtonImage));
+			gc.gridx = 1;
+			gc.gridy = 3;
+			gc.gridwidth = 1;
+			gc.gridheight =1;
+			gc.ipadx = 0;
+			gc.ipady = 0;
+			gc.weightx = .1;
+			gc.weighty = .1;
+			gc.anchor = GridBagConstraints.CENTER;
+			gc.fill = GridBagConstraints.BOTH;
+			gc.insets = new Insets(20,20,20,20);
+			contenedor.add(removeButton,gc);
+			removeButton.addActionListener(this);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		addButton = new JButton("Agregar");
-		gc.gridx = 0;
-		gc.gridy = 3;
-		gc.gridwidth = 1;
-		gc.gridheight =1;
-		gc.ipady = 5;
-		gc.fill = GridBagConstraints.NONE;
-		contenedor.add(addButton,gc);
-		addButton.addActionListener(this);
+	
 		
-		removeButton = new JButton("Eliminar");
-		gc.gridx = 1;
-		gc.gridy = 3;
-		gc.gridwidth = 1;
-		gc.gridheight =1;
-		gc.ipady = 5;
-		gc.fill = GridBagConstraints.NONE;
-		contenedor.add(removeButton,gc);
-		removeButton.addActionListener(this);
+		
 		
 	}
 	
@@ -313,8 +316,6 @@ public class Frame extends JFrame implements ActionListener {
 			{
 				id = entry.getKey();
 				System.out.print("[INFO] id to delete ="+id);
-				//con.deleteList(id);
-				//refreshListList();
 				break;
 				
 			}
@@ -392,16 +393,20 @@ public class Frame extends JFrame implements ActionListener {
 			gc.gridheight =1;
 			gc.ipady = 30;
 			gc.ipadx = 0;
+			gc.weightx =1;
+			gc.weighty = 1;
+			gc.anchor=GridBagConstraints.EAST;
 			gc.fill = GridBagConstraints.BOTH;
 			this.add(labelName,gc);
 			
-			nameField = new JTextField();
+			nameField = new JTextField(35);
 			gc.gridx = 1;
 			gc.gridy = 0;
-			gc.gridwidth = 4;
+			gc.gridwidth = 5;
 			gc.gridheight =1;
 			gc.ipady = 0;
 			gc.ipadx = 0;
+			gc.anchor=GridBagConstraints.WEST;
 			gc.fill = GridBagConstraints.HORIZONTAL;
 			this.add(nameField,gc);
 			
@@ -410,19 +415,20 @@ public class Frame extends JFrame implements ActionListener {
 			gc.gridy = 1;
 			gc.gridwidth = 1;
 			gc.gridheight =1;
-			gc.ipady = 30;
+			gc.ipady = 0;
 			gc.ipadx = 0;
 			gc.anchor = GridBagConstraints.EAST;
 			gc.fill = GridBagConstraints.NONE;
 			this.add(labelGrade,gc);
 			
-			gradeField = new JTextField();
+			gradeField = new JTextField(3);
 			gc.gridx = 1;
 			gc.gridy = 1;
 			gc.gridwidth = 1;
 			gc.gridheight =1;
 			gc.ipady = 0;
-			gc.ipadx = 20;
+			gc.ipadx = 0;
+			gc.anchor=GridBagConstraints.WEST;
 			gc.fill = GridBagConstraints.HORIZONTAL;
 			this.add(gradeField,gc);
 			
@@ -436,12 +442,13 @@ public class Frame extends JFrame implements ActionListener {
 			gc.fill = GridBagConstraints.NONE;
 			this.add(labelSection,gc);
 			
-			sectionField = new JTextField();
+			sectionField = new JTextField(3);
 			gc.gridx = 3;
 			gc.gridy = 1;
 			gc.gridwidth = 1;
 			gc.gridheight =1;
 			gc.ipady = 0;
+			gc.anchor=GridBagConstraints.WEST;
 			gc.fill = GridBagConstraints.HORIZONTAL;
 			this.add(sectionField,gc);
 			
@@ -456,19 +463,20 @@ public class Frame extends JFrame implements ActionListener {
 			gc.fill = GridBagConstraints.NONE;
 			this.add(labelYear,gc);
 			
-			yearField = new JTextField();
+			yearField = new JTextField(11);
 			gc.gridx = 5;
 			gc.gridy = 1;
 			gc.gridwidth = 1;
 			gc.gridheight =1;
 			gc.ipady = 0;
-			gc.ipadx = 80;
+			gc.ipadx = 0;
+			gc.anchor=GridBagConstraints.WEST;
 			gc.fill = GridBagConstraints.HORIZONTAL;
 			this.add(yearField,gc);
 		}
-		
-		
-		
-	}
+
+	}// End of PanelDeDatos class
+	
+	
 
 }
