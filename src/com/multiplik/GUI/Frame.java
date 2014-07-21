@@ -137,7 +137,7 @@ public class Frame extends JFrame implements ActionListener {
 		
 		try {
 			System.out.println("[DEBUG] URL="+this.getClass().getResource("/src/resources/logo2.png"));
-			JLabel logoLabel = new JLabel (new ImageIcon(ImageIO.read(new File("./resources/logo2.png"))));
+			JLabel logoLabel = new JLabel (new ImageIcon(ImageIO.read(this.getClass().getResource("/logo2.png"))));
 			gc.gridx = 0;
 			gc.gridy = 0;
 			gc.gridwidth = 2;
@@ -219,7 +219,7 @@ public class Frame extends JFrame implements ActionListener {
 	
 		try {
 			
-			Image addButtonImage = ImageIO.read(new File("./resources/add_small.png"));
+			Image addButtonImage = ImageIO.read(this.getClass().getResource("/add_small.png"));
 			addButton = new JButton();
 			addButton.setIcon(new ImageIcon(addButtonImage));
 			gc.gridx = 0;
@@ -243,7 +243,7 @@ public class Frame extends JFrame implements ActionListener {
 		}
 		try {
 			Image removeButtonImage;
-			removeButtonImage = ImageIO.read(new File("./resources/minus_small.png"));
+			removeButtonImage = ImageIO.read(this.getClass().getResource("/minus_small.png"));
 			removeButton = new JButton();
 			removeButton.setIcon(new ImageIcon(removeButtonImage));
 			gc.gridx = 1;
@@ -338,15 +338,39 @@ public class Frame extends JFrame implements ActionListener {
 		}else if(pressedButton == submittButton)
 		{
 			try {
-			//	List <String> list = new ArrayList<String>();
-				ImageEditor editor = new ImageEditor(ImageIO.read(new File("./etiquet.png")),1);
-				
+					
+				ImageEditor editor = new ImageEditor(ImageIO.read(this.getClass().getResource("/etiquet.png")),1);
 				editor.setName(nameField.getText());
 				editor.setGrade(this.getGrade());
 				editor.setSection(this.getSection());
 				editor.setYear(this.getYear());
-				editor.setSubjects(con.getSubjectList(searchID(list.getSelectedValue())));
-				ImageIO.write((RenderedImage) editor.getLabelSheet(), "png", new File("./test.png"));
+				//editor.setSubjects(con.getSubjectList(searchID(list.getSelectedValue())));
+				//ImageIO.write((RenderedImage) editor.getLabelSheet(), "png", new File("./test.png"));
+				
+				List<String> subjectList = con.getSubjectList(searchID(list.getSelectedValue()));
+				List <String> newSubjectList = new ArrayList<String>();
+				
+				int i = 0;// Numero de materias totales
+				int h = 0; // Numero de hojas 
+				while (((int)Math.ceil((subjectList.size())/8)) >= h)
+				{
+					newSubjectList.clear();
+					for (int j = 0; j <= 7 ; j++)//j = numero de materias por hoja
+					{
+						if (i >= subjectList.size())
+						{
+							break;
+						}
+						newSubjectList.add(subjectList.get(i));
+						i++;
+					}
+					editor.setSubjects(newSubjectList);
+					ImageIO.write((RenderedImage) editor.getLabelSheet(), "png", new File("./etiquetas"+h+".png"));
+					h++;
+					
+				}
+			//	List <String> list = new ArrayList<String>();
+				
 				
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -358,25 +382,7 @@ public class Frame extends JFrame implements ActionListener {
 			String selectedValue = list.getSelectedValue();
 			
 			con.deleteList(searchID(selectedValue));
-			refreshListList();
-			/*int idToDelete;
-			for (Entry<Integer, String> entry : listMap.entrySet())
-			{
-				System.out.println("[INFO] is :"+selectedValue+"equal to :"+entry);
-				if(selectedValue.equals(entry.getValue()))
-				{
-					idToDelete = entry.getKey();
-					System.out.print("[INFO] id to delete ="+idToDelete);
-					con.deleteList(idToDelete);
-					refreshListList();
-					break;
-					
-				}
-				
-			}*/
-			
-			
-			
+			refreshListList();			
 		}
 	}
 	

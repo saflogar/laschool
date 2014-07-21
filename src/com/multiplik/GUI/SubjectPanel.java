@@ -31,7 +31,7 @@ public class SubjectPanel extends JPanel{
 		this.setLayout(null);
 		subjectList = new ArrayList<JTextField>();
 		try {
-			imageLabel = ImageIO.read(new File("./etiquet.png"));
+			imageLabel = ImageIO.read(this.getClass().getResource("/etiquet.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
