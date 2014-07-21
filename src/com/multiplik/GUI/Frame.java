@@ -326,7 +326,8 @@ public class Frame extends JFrame implements ActionListener {
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) 
+	{
 		// TODO Auto-generated method stub
 		Object objeto = e.getSource();
 		JButton pressedButton = (JButton)objeto;
@@ -337,44 +338,49 @@ public class Frame extends JFrame implements ActionListener {
 			
 		}else if(pressedButton == submittButton)
 		{
-			try {
-					
-				ImageEditor editor = new ImageEditor(ImageIO.read(this.getClass().getResource("/etiquet.png")),1);
-				editor.setName(nameField.getText());
-				editor.setGrade(this.getGrade());
-				editor.setSection(this.getSection());
-				editor.setYear(this.getYear());
-				//editor.setSubjects(con.getSubjectList(searchID(list.getSelectedValue())));
-				//ImageIO.write((RenderedImage) editor.getLabelSheet(), "png", new File("./test.png"));
-				
-				List<String> subjectList = con.getSubjectList(searchID(list.getSelectedValue()));
-				List <String> newSubjectList = new ArrayList<String>();
-				
-				int i = 0;// Numero de materias totales
-				int h = 0; // Numero de hojas 
-				while (((int)Math.ceil((subjectList.size())/8)) >= h)
+			if (!list.isSelectionEmpty())
+			{
+				try 
 				{
-					newSubjectList.clear();
-					for (int j = 0; j <= 7 ; j++)//j = numero de materias por hoja
+					ImageEditor editor = new ImageEditor(ImageIO.read(this.getClass().getResource("/etiquet.png")),1);
+					editor.setName(nameField.getText());
+					editor.setGrade(this.getGrade());
+					editor.setSection(this.getSection());
+					editor.setYear(this.getYear());
+				
+					List<String> subjectList = con.getSubjectList(searchID(list.getSelectedValue()));
+					List <String> newSubjectList = new ArrayList<String>();
+				
+					int i = 0;// Numero de materias totales
+					int h = 0; // Numero de hojas 
+					while (((int)Math.ceil((subjectList.size())/8)) >= h)
 					{
-						if (i >= subjectList.size())
+						newSubjectList.clear();
+						for (int j = 0; j <= 7 ; j++)//j = numero de materias por hoja
 						{
-							break;
+							if (i >= subjectList.size())
+							{	
+								break;
+							}
+							newSubjectList.add(subjectList.get(i));
+							i++;
 						}
-						newSubjectList.add(subjectList.get(i));
-						i++;
-					}
-					editor.setSubjects(newSubjectList);
-					ImageIO.write((RenderedImage) editor.getLabelSheet(), "png", new File("./etiquetas"+h+".png"));
-					h++;
+						editor.setSubjects(newSubjectList);
+						ImageIO.write((RenderedImage) editor.getLabelSheet(), "png", new File("./etiquetas"+h+".png"));
+						h++;
 					
+					}
+							
+				
+				} catch (IOException e1) 
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-			//	List <String> list = new ArrayList<String>();
-				
-				
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			
+			}else 
+			{
+				JOptionPane.showMessageDialog(this, "Seleccione un elemento de la lista");
 			}
 		}
 		else if (pressedButton == removeButton)
