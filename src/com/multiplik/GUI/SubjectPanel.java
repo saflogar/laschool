@@ -56,7 +56,7 @@ public class SubjectPanel extends JPanel{
 			this.add(textField);
 			System.out.println("[INFO] added textfield to subjectPanel in position("+x+","+y+")");
 			textField.setBounds((int)(x+439*scale)-100, (int) (y+505*scale)-20, 250, 20);
-			textField.setFont(new Font("courier",Font.BOLD,(int) (36*scale)));
+			textField.setFont(new Font("Arial",Font.BOLD,(int) (36*scale)));
 			}
 			
 			g.drawImage(imageLabel, x, y,(int)imageWidth,(int) imageHeight, null);
