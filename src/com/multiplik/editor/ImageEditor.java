@@ -76,7 +76,7 @@ public class ImageEditor {
 		Graphics2D g2d	= (Graphics2D) gSheet;
         Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
 		g2d.setStroke(dashed);
-		g2d.setColor(Color.GRAY);
+		g2d.setColor(Color.BLACK);
 		g2d.drawLine(x1, y1, x2, y2);
 	}
 	
@@ -89,8 +89,9 @@ public class ImageEditor {
 		gSheet.setColor(Color.WHITE);
 		gSheet.drawRect(0, 0, 2550, 3300);
 		int x=140,y=185;
-		drawDotLine(x+labelImg.getWidth(null)+(120/2), 0, x+labelImg.getWidth(null)+(120/2), 3300);
-
+		drawDotLine(x-(140/2), 0, x-(140/2), 3300);
+		drawDotLine(x+labelImg.getWidth(null)+(140/2), 0, x+labelImg.getWidth(null)+(140/2), 3300);
+		drawDotLine(x+(labelImg.getWidth(null)*2)+(140)+(140/2), 0, x+(labelImg.getWidth(null)*2)+(140)+(140/2), 3300);
 		for (int i=0 ; i < subjectList.size(); i++)
 		{
 			drawSubject(subjectList.get(i));
@@ -106,6 +107,8 @@ public class ImageEditor {
 			}else
 			x+=labelImg.getWidth(null)+130; 
 		}
+		drawDotLine(0,y-(150/2) , 2550,y-(150/2));
+
 		
 	}
 	
