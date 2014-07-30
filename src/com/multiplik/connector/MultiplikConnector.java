@@ -17,10 +17,6 @@ public class MultiplikConnector extends Connector {
 		
 	}
 	
-	
-	
-	
-	
 	public  void addNewList (String schoolName,int schoolGrade, String[] subjects)
 	{
 		try {
@@ -203,6 +199,9 @@ public class MultiplikConnector extends Connector {
 		PreparedStatement statement;
 		try {
 			statement = con.prepareStatement("DELETE FROM list WHERE id_list = ?");
+			statement.setInt(1, id);
+			statement.execute();
+			statement = con.prepareStatement("DELETE FROM subject WHERE list_id = ?");
 			statement.setInt(1, id);
 			statement.execute();
 			
