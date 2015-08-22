@@ -15,4 +15,6 @@ RELEASE 1.023
 - Added cutting lines.
 
 
-Laschool was firs created for Papeleria Multiplik (www.papeleriamultiplik.com.mx)
+Laschool was first created for Papeleria Multiplik (www.papeleriamultiplik.com.mx)
+
+By Sergio Flores
