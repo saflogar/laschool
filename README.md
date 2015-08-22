@@ -13,3 +13,6 @@ RELEASE 1.023
 - Now the user can other labels to the system.
 - PDF file created for labels.
 - Added cutting lines.
+
+
+Laschool was firs created for Papeleria Multiplik (www.papeleriamultiplik.com.mx)
